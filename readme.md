@@ -1,5 +1,5 @@
-先进入正确系统
-cd "D:\语音识别\projects\emotion_recognition_app"
-.\.venv\Scripts\Activate.ps1
-然后开启网站
-python web_app.py
+1. 先进入项目目录
+2. 创建并激活虚拟环境
+3. 安装依赖包
+4. 下载模型训练数据集 ravdess 并进行训练  得到训练模型 `python main.py`
+5. 运行网站 `python web_app.py` 进入网站 `http://127.0.0.1:5000/`
