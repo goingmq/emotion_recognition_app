@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8">
+    <title>语音情绪识别 Demo</title>
+
+    <style>
+        :root {
+            --background: #f7f8fa;
+            --foreground: #0a0a14;
+            --card: #ffffff;
+            --accent: #e3f0ff;
+            --accent-border: #70a6ff;
+            --primary: #3483fa;
+            --primary-hover: #2a6ed4;
+            --radius: 14px;
+        }
+
+        body {
+            margin: 0;
+            background: var(--background);
+            font-family: "Inter", sans-serif;
+            color: var(--foreground);
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2rem;
+            margin-top: 40px;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .container {
+            max-width: 760px;
+            background: var(--card);
+            padding: 32px;
+            margin: 0 auto 40px;
+            border-radius: var(--radius);
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.08);
+        }
+
+        .upload-box {
+            border: 2px dashed var(--accent-border);
+            background: var(--accent);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: var(--radius);
+        }
+
+        .icon {
+            font-size: 40px;
+        }
+
+        .upload-btn, .file-label {
+            display: inline-block;
+            padding: 10px 22px;
+            margin-top: 15px;
+            background: var(--primary);
+            color: #fff;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: 0.2s;
+            text-decoration: none;
+        }
+
+        .upload-btn:hover, .file-label:hover {
+            background: var(--primary-hover);
+        }
+
+        input[type="file"] { display: none; }
+
+        .result-card {
+            margin-top: 30px;
+            background: var(--card);
+            padding: 20px;
+            border-radius: var(--radius);
+            box-shadow: 0 3px 20px rgba(0,0,0,0.06);
+        }
+
+        .success {
+            background: #d7f5dd;
+            color: #2a7b2a;
+            padding: 10px 14px;
+            border-radius: var(--radius);
+            margin-bottom: 12px;
+        }
+
+        table {
+            margin-top: 12px;
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #eee;
+            text-align: center;
+        }
+
+        th { background: #f0f3f7; font-weight: 600; }
+
+        audio { width: 100%; margin-top: 10px; }
+        .error { color: #c00; text-align: center; margin-top: 10px; }
+    </style>
+</head>
+
+<body>
+
+<h1>Speech Emotion Recognition</h1>
+<p class="subtitle">Upload audio → Predict emotion instantly</p>
+
+
+<div class="container">
+
+    <div class="upload-box">
+        <div class="icon">🎵</div>
+        <p>选择一个 .wav 语音文件进行情绪识别</p>
+
+        <form method="post" enctype="multipart/form-data">
+            <label class="file-label">
+                选择音频文件
+                <input type="file" name="audio" accept=".wav,audio/*">
+            </label>
+
+            <button class="upload-btn" type="submit">上传并识别</button>
+        </form>
+    </div>
+
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+
+    {% if success %}
+        <div class="success">音频上传成功！正在展示预测结果。</div>
+    {% endif %}
+
+    {% if result %}
+    <div class="result-card">
+
+        <h2>预测情绪：{{ result }}</h2>
+
+        {% if filename %}
+        <p style="margin-top:6px;">上传的文件：<b>{{ filename }}</b></p>
+        {% endif %}
+
+        {% if audio_path %}
+        <audio controls src="{{ audio_path }}"></audio>
+        {% endif %}
+
+        <h3 style="margin-top:20px;">情绪概率分布</h3>
+        <table>
+            <tr>
+                <th>情绪</th>
+                <th>概率</th>
+            </tr>
+            {% for name, p in prob_pairs %}
+            <tr>
+                <td>{{ name }}</td>
+                <td>{{ '{:.2f}%'.format(p * 100) }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+
+    </div>
+    {% endif %}
+
+</div>
+
+</body>
+</html>

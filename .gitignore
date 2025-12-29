@@ -1,0 +1,18 @@
+# Python cache files
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+
+# Uploaded audio files (Flask upload folder)
+static/uploads/
+
+# Project data (datasets)
+data/
+
+# Logs
+*.log
+
+# Model files (optional — remove this line if you want to upload .h5)
+*.h5
